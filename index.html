@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Champion Trees - Explorer</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;900&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Champion Trees - Explorer</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700;900&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
         theme: {
@@ -72,201 +71,215 @@
         },
       }
     </script>
-<style>
+    <style>
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       }
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       .organic-mask-xl { border-radius: 0.75rem 0.75rem 0.75rem 0px; }
+
+      body {
+        min-height: max(884px, 100dvh);
+      }
+
+      .modal-backdrop {
+        background-color: rgba(2, 28, 16, 0.4);
+        backdrop-filter: blur(8px);
+      }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
+</head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-fixed-dim">
-<!-- TopAppBar -->
-<header class="fixed top-0 left-0 right-0 z-50 bg-[#fcf9f2] dark:bg-[#021c10] transition-colors duration-300">
-<div class="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[#021c10] dark:text-[#fcf9f2]" data-icon="park">park</span>
-<h1 class="font-['Noto_Serif'] font-black text-[#021c10] dark:text-[#fcf9f2] text-xl tracking-tight">Champion Trees</h1>
-</div>
-<div class="flex items-center gap-4">
-<button class="p-2 rounded-full hover:bg-[#e5e2db] dark:hover:bg-[#173124] transition-all text-[#7a5649] dark:text-[#b0cdbb]">
-<span class="material-symbols-outlined" data-icon="search">search</span>
-</button>
-<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="User profile avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBufj-7EDGW6ragafLuErSZpZ2VNTbGj8yrMKafDByZ10_UU30BJL4gsn3UD6VO_X8JGqad_EmLsZDHEzfjHNI4RUg-QunnPBoc47v5KAAATWSxZCNGUKkgNsAWlmrF-HrlpFdhOaINeF0s53RsjtWich1R1hqFWis_b70K8RvzheyF1xu9IkldjDAHBKjnUsqqeVcLCmTdSzWyic-NXPnyuuMOyGG1WeeReEzSrjsfuHl8QvWsMrJlkYkcBU8mHK5vslJtYCsUasY"/>
-</div>
-</div>
-</div>
-</header>
-<main class="pt-16 pb-32 max-w-7xl mx-auto px-6">
-<!-- Search & Filter Section -->
-<section class="mt-8 mb-10">
-<div class="relative group">
-<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
-</div>
-<input class="w-full h-14 pl-12 pr-4 bg-surface-container-highest border-none rounded-xl focus:ring-0 focus:bg-surface-container transition-colors font-body text-on-surface" placeholder="Find a specimen or grove..." type="text"/>
-<div class="absolute inset-y-0 right-4 flex items-center">
-<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-1.5 rounded-lg text-sm font-medium">
-<span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
-<span>Filter</span>
-</button>
-</div>
-</div>
-<div class="flex gap-3 mt-6 overflow-x-auto no-scrollbar pb-2">
-<button class="whitespace-nowrap px-5 py-2 rounded-full bg-tertiary-container text-on-tertiary-container text-sm font-label font-medium uppercase tracking-wider">Conifers</button>
-<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors">Deciduous</button>
-<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors">Ancient Growth</button>
-<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors">Coastal</button>
-<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors">Redwoods</button>
-</div>
-</section>
-<!-- Hero: Tree of the Day -->
-<section class="mb-14">
-<div class="group relative w-full h-[500px] overflow-hidden organic-mask-xl bg-primary-container">
-<img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="Large majestic redwood tree in morning mist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRxBx02dxGwkrzGaJPrhyUHa9WEN9EWX0SLdJB7B89CJqfZVjTbVJKf_Tk1uTn1TH6ciUdSJMD6LnKgcuI1JpeVyGi8Pti_Rp1s6zMyvG1djFnrTl16-x18BarsXrLfPab472s0ieiUbf-NqR7sffN7XCObVZUamgUtMpWTombq7IVXLTBAF_UfE504ZsjXGaSYP8UAVv-KNWxexX_tEpqNs1Dor0tfTzG78R0jVUXbzsyFbEQ1hjaT2IMkaMc45nrkDIUdxt62Ig"/>
-<div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-60"></div>
-<div class="absolute top-6 right-6">
-<div class="bg-surface/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-<p class="text-[10px] font-label font-bold text-white uppercase tracking-[0.2em]">Tree of the Day</p>
-</div>
-</div>
-<div class="absolute bottom-10 left-8 right-8">
-<p class="text-primary-fixed-dim font-label text-sm uppercase tracking-widest mb-2">Sequoia sempervirens</p>
-<h2 class="font-headline text-4xl md:text-6xl text-on-primary font-bold mb-4 tracking-tight">The Hyperion Giant</h2>
-<div class="flex flex-wrap gap-8 items-center mt-6">
-<div>
-<p class="text-primary-fixed-dim text-[10px] uppercase font-label tracking-widest">Height</p>
-<p class="text-white font-headline text-2xl font-bold">115.9 m</p>
-</div>
-<div>
-<p class="text-primary-fixed-dim text-[10px] uppercase font-label tracking-widest">Age</p>
-<p class="text-white font-headline text-2xl font-bold">~800 yrs</p>
-</div>
-<button class="ml-auto bg-white text-primary px-8 py-3 rounded-md font-bold uppercase text-xs tracking-widest active:scale-95 transition-all">
+    <!-- TopAppBar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#fcf9f2] dark:bg-[#021c10] transition-colors duration-300">
+        <div class="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-2 cursor-pointer" id="logo">
+                <span class="material-symbols-outlined text-[#021c10] dark:text-[#fcf9f2]" data-icon="park">park</span>
+                <h1 class="font-['Noto_Serif'] font-black text-[#021c10] dark:text-[#fcf9f2] text-xl tracking-tight">Champion Trees</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="p-2 rounded-full hover:bg-[#e5e2db] dark:hover:bg-[#173124] transition-all text-[#7a5649] dark:text-[#b0cdbb]" id="search-btn">
+                    <span class="material-symbols-outlined" data-icon="search">search</span>
+                </button>
+                <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden cursor-pointer" id="profile-avatar">
+                    <img class="w-full h-full object-cover" data-alt="User profile avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBufj-7EDGW6ragafLuErSZpZ2VNTbGj8yrMKafDByZ10_UU30BJL4gsn3UD6VO_X8JGqad_EmLsZDHEzfjHNI4RUg-QunnPBoc47v5KAAATWSxZCNGUKkgNsAWlmrF-HrlpFdhOaINeF0s53RsjtWich1R1hqFWis_b70K8RvzheyF1xu9IkldjDAHBKjnUsqqeVcLCmTdSzWyic-NXPnyuuMOyGG1WeeReEzSrjsfuHl8QvWsMrJlkYkcBU8mHK5vslJtYCsUasY"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-16 pb-32 max-w-7xl mx-auto px-6">
+        <!-- Search & Filter Section -->
+        <section class="mt-8 mb-10">
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                    <span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+                </div>
+                <input id="search-input" class="w-full h-14 pl-12 pr-4 bg-surface-container-highest border-none rounded-xl focus:ring-0 focus:bg-surface-container transition-colors font-body text-on-surface" placeholder="Find a specimen or grove..." type="text"/>
+                <div class="absolute inset-y-0 right-4 flex items-center">
+                    <button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-1.5 rounded-lg text-sm font-medium" id="filter-btn">
+                        <span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
+                        <span>Filter</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6 overflow-x-auto no-scrollbar pb-2" id="filter-chips">
+                <button class="filter-chip whitespace-nowrap px-5 py-2 rounded-full bg-tertiary-container text-on-tertiary-container text-sm font-label font-medium uppercase tracking-wider" data-category="all">All</button>
+                <button class="filter-chip whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors" data-category="conifers">Conifers</button>
+                <button class="filter-chip whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors" data-category="deciduous">Deciduous</button>
+                <button class="filter-chip whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors" data-category="washington">Washington</button>
+                <button class="filter-chip whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-label font-medium uppercase tracking-wider hover:bg-surface-container-highest transition-colors" data-category="california">California</button>
+            </div>
+        </section>
+
+        <!-- Hero: Tree of the Day -->
+        <section class="mb-14" id="hero-section">
+            <div class="group relative w-full h-[500px] overflow-hidden organic-mask-xl bg-primary-container cursor-pointer" id="hero-card">
+                <img id="hero-image" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" data-alt="Large majestic redwood tree in morning mist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRxBx02dxGwkrzGaJPrhyUHa9WEN9EWX0SLdJB7B89CJqfZVjTbVJKf_Tk1uTn1TH6ciUdSJMD6LnKgcuI1JpeVyGi8Pti_Rp1s6zMyvG1djFnrTl16-x18BarsXrLfPab472s0ieiUbf-NqR7sffN7XCObVZUamgUtMpWTombq7IVXLTBAF_UfE504ZsjXGaSYP8UAVv-KNWxexX_tEpqNs1Dor0tfTzG78R0jVUXbzsyFbEQ1hjaT2IMkaMc45nrkDIUdxt62Ig"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-60"></div>
+                <div class="absolute top-6 right-6">
+                    <div class="bg-surface/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                        <p class="text-[10px] font-label font-bold text-white uppercase tracking-[0.2em]">Tree of the Day</p>
+                    </div>
+                </div>
+                <div class="absolute bottom-10 left-8 right-8">
+                    <p id="hero-scientific" class="text-primary-fixed-dim font-label text-sm uppercase tracking-widest mb-2">Loading...</p>
+                    <h2 id="hero-common" class="font-headline text-4xl md:text-6xl text-on-primary font-bold mb-4 tracking-tight">Champion Tree</h2>
+                    <div class="flex flex-wrap gap-8 items-center mt-6">
+                        <div>
+                            <p class="text-primary-fixed-dim text-[10px] uppercase font-label tracking-widest">Height</p>
+                            <p id="hero-height" class="text-white font-headline text-2xl font-bold">---</p>
+                        </div>
+                        <div>
+                            <p class="text-primary-fixed-dim text-[10px] uppercase font-label tracking-widest">Points</p>
+                            <p id="hero-points" class="text-white font-headline text-2xl font-bold">---</p>
+                        </div>
+                        <button class="ml-auto bg-white text-primary px-8 py-3 rounded-md font-bold uppercase text-xs tracking-widest active:scale-95 transition-all" id="hero-dossier-btn">
                             View Dossier
                         </button>
-</div>
-</div>
-</div>
-</section>
-<!-- Recent Champions (Bento Grid Style) -->
-<section class="mb-14">
-<div class="flex justify-between items-end mb-8">
-<div>
-<span class="text-secondary font-label text-[10px] uppercase tracking-[0.3em] font-bold">Curated Selection</span>
-<h3 class="font-headline text-3xl text-on-surface font-bold mt-1">Recent Champions</h3>
-</div>
-<button class="text-primary font-label text-xs uppercase tracking-widest font-bold border-b-2 border-primary-fixed pb-1 hover:border-primary transition-colors">See all</button>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[450px]">
-<div class="md:col-span-7 bg-surface-container-low rounded-xl overflow-hidden relative group">
-<img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Ancient gnarled oak tree in foggy forest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcX-x-4VXcJi_V2eyE0vkvHXmDY2O80c5uPKVhqbrMrhptT7HtBDCKlY8fhpoBB6KKzRufZ3T8pImpMkz88iM_W01MmsU3aXFaeFA7GAkxRaW1H5hlOzHLIheXZ3PeWDQ6vCJxX-nGOdYmvgEcL6BAkrhIUnLSDusXk3Y8SAdv99vxuR_eUEn5pB8Fl8mG5K5lJ6m18kCpsC0pRmT8vO7lpWnP654Pj1i6r9cp38BH3Xvao8aVLcJvw2RtX5JCaX1pwId_ArckTvU"/>
-<div class="absolute inset-0 bg-gradient-to-t from-[#1c1c18]/80 to-transparent"></div>
-<div class="absolute bottom-6 left-6">
-<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider mb-2 inline-block">New Record</span>
-<h4 class="text-white font-headline text-2xl font-bold">Elder Oak of Wessex</h4>
-<p class="text-secondary-fixed-dim text-xs font-label">United Kingdom • 1,200 years old</p>
-</div>
-</div>
-<div class="md:col-span-5 grid grid-rows-2 gap-6">
-<div class="bg-surface-container rounded-xl flex items-center p-6 gap-6 group cursor-pointer hover:bg-surface-container-high transition-colors">
-<div class="w-24 h-24 shrink-0 organic-mask-xl overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="Golden larch trees in autumn" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtq2VcTLF1ZugTW2h7WTtu-3_qPVvixNtFg2iPc5Ur5-wxCiIW1UFJ82RIG-OLxk8cAOc120Uk2QPJtrRm9tTpDG0wIX6V7Yo8yti2NQYXx0IdTjYUeScYNHCKU26oB3uOW4WzYOrPFE1V8hL9imzpcLP0U52ARATLUj-wcQ3sMnrw8m74T9SClyY-o0U9OLKvXImI_rVK0AbrF9MrsV-Zl113qkAai6-7FLvRtQusuaD-sifcowwhP--is0d8FRKin9CVh_xgKBc"/>
-</div>
-<div>
-<h4 class="font-headline text-lg font-bold text-on-surface">The Sun-Catcher</h4>
-<p class="text-on-surface-variant text-sm mb-3">Larches of the Alps</p>
-<span class="text-secondary text-xs font-bold uppercase tracking-widest">45m High</span>
-</div>
-</div>
-<div class="bg-surface-container-highest rounded-xl flex items-center p-6 gap-6 group cursor-pointer hover:bg-surface-container-high transition-colors">
-<div class="w-24 h-24 shrink-0 organic-mask-xl overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="Sunlight rays through green forest canopy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtvTFFcwsN7ysQIbOz6Lbl7zDoHmHUCAgpaeLlXKUjmsoJfnmMRfmFCiCybUM4MC2xx6I6yr5TDdbPtK4gYEdUAc3zgXFFLlm0aUKQc-7o-bKkOaDxAWGp1nCnnA9p6ud1XDFj73w8ndiiWAaPodTzjTCowAPkTAwcjTxBCtyBrlsZYry74__cZG6bqlIc0TRzGDO8XtU19ddeSFbFF2wxoOwk2wn1zVrJjiq2VPDGTI-M36xWNTcdXYD7bztteMK5zbIb5YUavJs"/>
-</div>
-<div>
-<h4 class="font-headline text-lg font-bold text-on-surface">Mossy Pillar</h4>
-<p class="text-on-surface-variant text-sm mb-3">Olympic National Forest</p>
-<span class="text-secondary text-xs font-bold uppercase tracking-widest">22m Girth</span>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- Seasonal Favorites (Horizontal Scroll) -->
-<section class="mb-20">
-<div class="flex justify-between items-end mb-8">
-<div>
-<span class="text-secondary font-label text-[10px] uppercase tracking-[0.3em] font-bold">Vernal Equinox</span>
-<h3 class="font-headline text-3xl text-on-surface font-bold mt-1">Seasonal Favorites</h3>
-</div>
-</div>
-<div class="flex gap-8 overflow-x-auto no-scrollbar -mx-6 px-6 pb-4">
-<div class="w-72 shrink-0">
-<div class="h-96 rounded-2xl overflow-hidden relative mb-4">
-<img class="w-full h-full object-cover" data-alt="Cherry blossoms in full pink bloom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_I-75hh2hMa09NAefj1TkMAaN08xbQw0nP0dpS1Ahp30XsA2QYjctqxygiIl8Q3X_gV9pywqnALkr5yr3rcm2hjNyi0XF9iOeXJ1gzLZ5Bog55X0p4NosS598Ow4_aBzsLCJDqbDqjzN183aXaqkorsfO21XYE08MAYfErfTlQZtGKU0lVa4fcGltpHEVV8y2LsroGgCNmMGlQcWnkK1T94KKb5bw3-59kf6eW8Io06BxV-wVT3222d8uYOJ0PWANmXs9XNcayQM"/>
-<div class="absolute top-4 left-4 bg-white/30 backdrop-blur-md px-3 py-1 rounded text-[10px] text-white font-bold uppercase tracking-widest">In Bloom</div>
-</div>
-<h5 class="font-headline text-xl font-bold">Yoshino Cherry</h5>
-<p class="text-on-surface-variant text-xs mt-1">Kyoto Prefecture, JP</p>
-</div>
-<div class="w-72 shrink-0">
-<div class="h-96 rounded-2xl overflow-hidden relative mb-4">
-<img class="w-full h-full object-cover" data-alt="Bright yellow autumn maple trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo-w0MNyWxqjp0sQd1JkoYkoysPmn3D8qYnhuON0Q24fS0VnguXV8KhsgYjuO6Jg3SU_0wU9eIsAg-V_q0OBtqKRBn2HMKgPE2fC3Szswt6jzVhE9YP-JUGQixRFISl5f00XLbPxQTNckLAtExQbvfIb6TlxzX3hdqydFxCABkMd286OTYz-jIAB5Uq7L3Ddc9h6J25YmewKxjskgWQ7FTPOxbhqsbvl2fw_qr6sFVi9tUjpYwa1iz-NejOcBQeG9ode3SwRN4VYU"/>
-<div class="absolute top-4 left-4 bg-white/30 backdrop-blur-md px-3 py-1 rounded text-[10px] text-white font-bold uppercase tracking-widest">Golden Peak</div>
-</div>
-<h5 class="font-headline text-xl font-bold">Sugar Maple</h5>
-<p class="text-on-surface-variant text-xs mt-1">Vermont, USA</p>
-</div>
-<div class="w-72 shrink-0">
-<div class="h-96 rounded-2xl overflow-hidden relative mb-4">
-<img class="w-full h-full object-cover" data-alt="Tall birch trees with white bark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6t6l3x_MSzqHlCNGz3ap9fiIUG2y5Bqnrgo9QfJjVnotpcn9EOI3Cu-RMhEUuH6ZRYxvNFzvtizfJDlf2J-sHyZaBYD4nv4J1chfA5Zv4P79vgaIYeLcGBdz2D7GRUtLyk5skVU5TBh6aQissas_JRtiF_73Ro9u02A-y3XCFWBvcvWB4XEY5ylmUymCRsKCPBUZbC2obtxrAH0Y9TRnvf1Ykc_u-oz6mUy1dxuyoa007u95yyQpQz5l7d0sg62297qQRCc9Qkfc"/>
-<div class="absolute top-4 left-4 bg-white/30 backdrop-blur-md px-3 py-1 rounded text-[10px] text-white font-bold uppercase tracking-widest">Silver Bark</div>
-</div>
-<h5 class="font-headline text-xl font-bold">Silver Birch</h5>
-<p class="text-on-surface-variant text-xs mt-1">Siberian Plains, RU</p>
-</div>
-<div class="w-72 shrink-0">
-<div class="h-96 rounded-2xl overflow-hidden relative mb-4">
-<img class="w-full h-full object-cover" data-alt="Lonely palm tree on a white beach" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkzWgZqL-tLlA-HcqHPn_oHN-agb71rwrUE9-q25et3fJMKgsrDBeHf-nwcVqRcjba1Bj1Ib2DdFYBxsZFxWjOJ95sLfvOn8ajCHUfIDAQbD6SE2xbWXzufI_G6GHgOq4KY7AXvdB7CO59fEYDmt1KO5L9LCMQpG342LClLe77V6QYacqRDqpJFfVZnqasfzG4KxoLJ4xvQ6YLUa-gvX3fGYJeLIQz9bPs3jrQYRzq-7cK_0fM-dbisQVN4VThapWqd2CklkcmbK8"/>
-</div>
-<h5 class="font-headline text-xl font-bold">Coconut Palm</h5>
-<p class="text-on-surface-variant text-xs mt-1">Mo'orea, PF</p>
-</div>
-</div>
-</section>
-</main>
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fcf9f2]/70 dark:bg-[#021c10]/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0_-4px_40px_rgba(28,28,24,0.06)] border-t border-[#e5e2db]/30 dark:border-[#173124]/30">
-<a class="flex flex-col items-center justify-center bg-[#021c10] dark:bg-[#fcf9f2] text-[#ffffff] dark:text-[#021c10] rounded-2xl px-4 py-1.5 transition-all duration-300 active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="explore">explore</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Explore</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="map">map</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Map</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="center_focus_strong">center_focus_strong</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Identify</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="filter_vintage">filter_vintage</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">My Grove</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#">
-<span class="material-symbols-outlined" data-icon="person">person</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Profile</span>
-</a>
-</nav>
-<!-- FAB -->
-<button class="fixed right-6 bottom-32 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-40 active:scale-95 transition-all">
-<span class="material-symbols-outlined text-3xl" data-icon="add_a_photo" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
-</button>
-</body></html>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Champions -->
+        <section class="mb-14">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <span class="text-secondary font-label text-[10px] uppercase tracking-[0.3em] font-bold">Curated Selection</span>
+                    <h3 class="font-headline text-3xl text-on-surface font-bold mt-1">Recent Champions</h3>
+                </div>
+                <button class="text-primary font-label text-xs uppercase tracking-widest font-bold border-b-2 border-primary-fixed pb-1 hover:border-primary transition-colors" id="see-all-btn">See all</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[450px]" id="recent-champions-grid">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- Seasonal Favorites -->
+        <section class="mb-20">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <span id="seasonal-label" class="text-secondary font-label text-[10px] uppercase tracking-[0.3em] font-bold">Vernal Equinox</span>
+                    <h3 class="font-headline text-3xl text-on-surface font-bold mt-1">Seasonal Favorites</h3>
+                </div>
+            </div>
+            <div class="flex gap-8 overflow-x-auto no-scrollbar -mx-6 px-6 pb-4" id="seasonal-favorites-container">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+    </main>
+
+    <!-- BottomNavBar -->
+    <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#fcf9f2]/70 dark:bg-[#021c10]/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0_-4px_40px_rgba(28,28,24,0.06)] border-t border-[#e5e2db]/30 dark:border-[#173124]/30">
+        <a class="nav-item flex flex-col items-center justify-center bg-[#021c10] dark:bg-[#fcf9f2] text-[#ffffff] dark:text-[#021c10] rounded-2xl px-4 py-1.5 transition-all duration-300 active:scale-90" href="#" id="nav-explore">
+            <span class="material-symbols-outlined" data-icon="explore">explore</span>
+            <span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Explore</span>
+        </a>
+        <a class="nav-item flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#" id="nav-map">
+            <span class="material-symbols-outlined" data-icon="map">map</span>
+            <span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Map</span>
+        </a>
+        <a class="nav-item flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#" id="nav-identify">
+            <span class="material-symbols-outlined" data-icon="center_focus_strong">center_focus_strong</span>
+            <span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Identify</span>
+        </a>
+        <a class="nav-item flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#" id="nav-mygrove">
+            <span class="material-symbols-outlined" data-icon="filter_vintage">filter_vintage</span>
+            <span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">My Grove</span>
+        </a>
+        <a class="nav-item flex flex-col items-center justify-center text-[#7a5649] dark:text-[#b0cdbb] px-4 py-1.5 hover:text-[#021c10] dark:hover:text-[#fcf9f2] transition-all active:scale-90" href="#" id="nav-profile">
+            <span class="material-symbols-outlined" data-icon="person">person</span>
+            <span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-wider mt-1">Profile</span>
+        </a>
+    </nav>
+
+    <!-- FAB -->
+    <button class="fixed right-6 bottom-32 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-40 active:scale-95 transition-all" id="fab">
+        <span class="material-symbols-outlined text-3xl" data-icon="add_a_photo" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
+    </button>
+
+    <!-- Modal for Tree Dossier -->
+    <div id="tree-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 modal-backdrop" id="modal-close-overlay"></div>
+        <div class="absolute bottom-0 left-0 right-0 max-w-2xl mx-auto bg-surface rounded-t-[2.5rem] shadow-2xl transition-transform transform translate-y-full duration-500 overflow-hidden" id="modal-content">
+            <div class="h-1.5 w-12 bg-surface-container-highest rounded-full mx-auto mt-4 mb-6"></div>
+            <div class="px-8 pb-12 overflow-y-auto max-h-[80vh] no-scrollbar">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <p id="modal-scientific" class="text-secondary font-label text-xs uppercase tracking-[0.2em] font-bold">Scientific Name</p>
+                        <h2 id="modal-common" class="font-headline text-3xl text-on-surface font-bold mt-1">Common Name</h2>
+                    </div>
+                    <button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center" id="modal-close-btn">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-[10px] uppercase tracking-widest font-label text-on-surface-variant mb-1">Location</p>
+                        <p id="modal-location" class="font-bold text-lg">County, State</p>
+                    </div>
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-[10px] uppercase tracking-widest font-label text-on-surface-variant mb-1">Nominated</p>
+                        <p id="modal-year" class="font-bold text-lg">YYYY</p>
+                    </div>
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-[10px] uppercase tracking-widest font-label text-on-surface-variant mb-1">Height</p>
+                        <p id="modal-height" class="font-bold text-lg">--- ft</p>
+                    </div>
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-[10px] uppercase tracking-widest font-label text-on-surface-variant mb-1">Circumference</p>
+                        <p id="modal-circ" class="font-bold text-lg">--- in</p>
+                    </div>
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-[10px] uppercase tracking-widest font-label text-on-surface-variant mb-1">DBH</p>
+                        <p id="modal-dbh" class="font-bold text-lg">--- in</p>
+                    </div>
+                    <div class="bg-surface-container-low p-5 rounded-2xl">
+                        <p class="text-[10px] uppercase tracking-widest font-label text-on-surface-variant mb-1">Total Points</p>
+                        <p id="modal-points" class="font-bold text-lg">---</p>
+                    </div>
+                </div>
+
+                <div class="bg-primary-container text-on-primary-container p-6 rounded-2xl mb-8">
+                    <h4 class="text-xs uppercase tracking-widest font-label font-bold mb-3 opacity-80">Documented By</h4>
+                    <p id="modal-measurer" class="font-headline text-xl font-bold">---</p>
+                </div>
+
+                <button class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold uppercase tracking-widest flex items-center justify-center gap-2" id="modal-collect-btn">
+                    <span class="material-symbols-outlined">filter_vintage</span>
+                    Add to My Grove
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-28 left-1/2 transform -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full text-sm font-medium z-[150] opacity-0 transition-opacity duration-300 pointer-events-none">
+        Feature coming soon!
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
