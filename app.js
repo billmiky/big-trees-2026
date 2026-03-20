@@ -3,9 +3,12 @@
 let allTrees = [];
 let filteredTrees = [];
 let currentCategory = 'all';
+let map = null;
+let markers = [];
 
 // State management for the modal
 let isModalOpen = false;
+let currentView = 'list';
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,6 +55,10 @@ function renderHero(tree) {
     document.getElementById('hero-height').textContent = `${tree['Height (ft)']} ft`;
     document.getElementById('hero-points').textContent = tree['Total Points'];
     document.getElementById('hero-card').dataset.treeId = tree['NCTP Tree Id'];
+
+    if (tree['image_url']) {
+        document.getElementById('hero-image').src = tree['image_url'];
+    }
 }
 
 function renderRecentChampions(trees) {
@@ -86,8 +93,8 @@ function createRecentChampionMainCard(tree) {
     div.className = 'md:col-span-7 bg-surface-container-low rounded-xl overflow-hidden relative group cursor-pointer';
     div.dataset.treeId = tree['NCTP Tree Id'];
 
-    // Using placeholders for now as real images are not available in the dataset
-    const imgUrl = `https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2232&auto=format&fit=crop`;
+    const fallbackImg = `https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2232&auto=format&fit=crop`;
+    const imgUrl = tree['image_url'] || fallbackImg;
 
     div.innerHTML = `
         <img class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" src="${imgUrl}" alt="${tree['Common Name']}"/>
@@ -108,7 +115,8 @@ function createRecentChampionSideCard(tree) {
     div.className = 'bg-surface-container rounded-xl flex items-center p-6 gap-6 group cursor-pointer hover:bg-surface-container-high transition-colors';
     div.dataset.treeId = tree['NCTP Tree Id'];
 
-    const imgUrl = `https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2340&auto=format&fit=crop`;
+    const fallbackImg = `https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2340&auto=format&fit=crop`;
+    const imgUrl = tree['image_url'] || fallbackImg;
 
     div.innerHTML = `
         <div class="w-24 h-24 shrink-0 organic-mask-xl overflow-hidden">
@@ -135,7 +143,8 @@ function renderSeasonalFavorites(trees) {
         div.className = 'w-72 shrink-0 cursor-pointer group';
         div.dataset.treeId = tree['NCTP Tree Id'];
 
-        const imgUrl = `https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=2341&auto=format&fit=crop`;
+        const fallbackImg = `https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=2341&auto=format&fit=crop`;
+        const imgUrl = tree['image_url'] || fallbackImg;
 
         div.innerHTML = `
             <div class="h-96 rounded-2xl overflow-hidden relative mb-4">
@@ -187,14 +196,21 @@ function setupEventListeners() {
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
-            navItems.forEach(i => {
-                i.classList.remove('bg-[#021c10]', 'dark:bg-[#fcf9f2]', 'text-[#ffffff]', 'dark:text-[#021c10]');
-                i.classList.add('text-[#7a5649]', 'dark:text-[#b0cdbb]');
-            });
-            item.classList.add('bg-[#021c10]', 'dark:bg-[#fcf9f2]', 'text-[#ffffff]', 'dark:text-[#021c10]');
-            item.classList.remove('text-[#7a5649]', 'dark:text-[#b0cdbb]');
 
-            if (item.id !== 'nav-explore') {
+            if (item.id === 'nav-explore' || item.id === 'nav-map') {
+                navItems.forEach(i => {
+                    i.classList.remove('bg-primary', 'text-on-primary');
+                    i.classList.add('text-secondary', 'dark:text-primary-fixed-dim');
+                });
+                item.classList.add('bg-primary', 'text-on-primary');
+                item.classList.remove('text-secondary', 'dark:text-primary-fixed-dim');
+
+                if (item.id === 'nav-explore') {
+                    switchView('list');
+                } else if (item.id === 'nav-map') {
+                    switchView('map');
+                }
+            } else {
                 showToast('Feature coming soon!');
             }
         });
@@ -256,11 +272,19 @@ function handleFilter(category) {
 }
 
 function renderAppFromFiltered() {
+    const countEl = document.getElementById('specimen-count');
+    if (countEl) {
+        countEl.textContent = `${filteredTrees.length} specimens found`;
+    }
+
     if (filteredTrees.length > 0) {
         renderHero(filteredTrees[0]);
+        renderRecentChampions(filteredTrees.slice(0, 3));
+        renderSeasonalFavorites(filteredTrees.slice(0, 12));
+    } else {
+        renderRecentChampions([]);
+        renderSeasonalFavorites([]);
     }
-    renderRecentChampions(filteredTrees.slice(0, 3));
-    renderSeasonalFavorites(filteredTrees.slice(0, 10));
 }
 
 function openModal(treeId) {
@@ -276,6 +300,16 @@ function openModal(treeId) {
     document.getElementById('modal-dbh').textContent = `${tree['DBH (in)']} in`;
     document.getElementById('modal-points').textContent = tree['Total Points'];
     document.getElementById('modal-measurer').textContent = tree['Measurer(s)'] || 'Unknown Measurer';
+
+    const modalImgContainer = document.getElementById('modal-image-container');
+    const modalImg = document.getElementById('modal-image');
+    if (tree['image_url']) {
+        modalImg.src = tree['image_url'];
+        modalImg.alt = tree['Common Name'];
+        modalImgContainer.classList.remove('hidden');
+    } else {
+        modalImgContainer.classList.add('hidden');
+    }
 
     const modal = document.getElementById('tree-modal');
     const content = document.getElementById('modal-content');
@@ -296,6 +330,65 @@ function closeModal() {
         modal.classList.add('hidden');
     }, 500);
     isModalOpen = false;
+}
+
+function switchView(view) {
+    if (currentView === view) return;
+    currentView = view;
+
+    const listView = document.getElementById('list-view');
+    const mapView = document.getElementById('map-view');
+
+    if (view === 'map') {
+        listView.classList.add('hidden');
+        mapView.classList.remove('hidden');
+        initMap();
+    } else {
+        listView.classList.remove('hidden');
+        mapView.classList.add('hidden');
+    }
+}
+
+function initMap() {
+    if (map) return;
+
+    // Standard Leaflet initialization
+    map = L.map('map').setView([39.8283, -98.5795], 4);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
+
+    renderMarkers();
+}
+
+function renderMarkers() {
+    if (!map) return;
+
+    // Clear existing markers
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+
+    // Custom marker icon using simple CSS for the modern look
+    const treeIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: "<div style='background-color:#021c10; width:12px; height:12px; border-radius:50%; border:2px solid white;'></div>",
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+    });
+
+    // We only render a subset if there are too many for performance,
+    // but with 547 it should be fine.
+    allTrees.forEach(tree => {
+        if (tree.lat && tree.lng) {
+            const marker = L.marker([tree.lat, tree.lng], { icon: treeIcon })
+                .addTo(map)
+                .on('click', () => openModal(tree['NCTP Tree Id']));
+            markers.push(marker);
+        }
+    });
 }
 
 function showToast(message) {
